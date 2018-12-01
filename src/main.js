@@ -42,14 +42,17 @@ function getWeaponData () {
     .then(response => response.data)
     .then(data => data[0])
     .then(weapon => {
-      const dmgBreakdown = processDamageData(weapon)
+      if (typeof weapon === 'undefined') {
+        console.error('sorry, that weapon does not exist')
+      } else {
+        const dmgBreakdown = processDamageData(weapon)
 
-      const rivenDispo = processRivenData(weapon)
+        const rivenDispo = processRivenData(weapon)
 
-      // Disable the indent rule for the string templating.
-      // Gods it's ugly.
-      /* eslint-disable indent */
-      const output = `
+        // Disable the indent rule for the string templating.
+        // Gods it's ugly.
+        /* eslint-disable indent */
+        const output = `
 name:\t\t${weapon.name}
 slot:\t\t${weapon.category}
 trigger:\t${weapon.trigger}
@@ -59,10 +62,11 @@ status:\t\t${Math.ceil(weapon.procChance * 100)}%
 disposition:\t${rivenDispo}
 damage:
   ${dmgBreakdown}
-      `
-      /* eslint-enable indent */
+        `
+        /* eslint-enable indent */
 
-      console.log(output.toLowerCase())
+        console.log(output.toLowerCase())
+      }
     })
     .catch(error => console.error(error))
 }
